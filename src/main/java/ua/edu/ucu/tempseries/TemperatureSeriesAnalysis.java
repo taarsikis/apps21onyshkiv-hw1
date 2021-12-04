@@ -82,7 +82,7 @@ public class TemperatureSeriesAnalysis {
         for (double num: this.temperatureSeries){
             double currDeviation = Math.abs(tempValue - num);
             if (currDeviation < deviation){
-                currDeviation = deviation;
+                deviation = currDeviation;
                 currVal = num;
             } else if (currDeviation == deviation) {
                 if ( num > currVal ){
