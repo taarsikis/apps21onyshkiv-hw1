@@ -1,6 +1,7 @@
 package ua.edu.ucu.tempseries;
 
 import static org.junit.Assert.*;
+
 import org.junit.Test;
 
 import java.util.InputMismatchException;
@@ -37,8 +38,8 @@ public class TemperatureSeriesAnalysisTest {
         double expResult = 1.0;
 
         double actualResult = seriesAnalysis.average();
-        
-        assertEquals(expResult, actualResult, 0.00001);        
+
+        assertEquals(expResult, actualResult, 0.00001);
     }
 
 
@@ -72,7 +73,7 @@ public class TemperatureSeriesAnalysisTest {
 
     @Test
     public void testFindTempClosestToValue() {
-        double[] temperatureSeries = {3.0, -5.0,-1.0, 1.0, 5.0};
+        double[] temperatureSeries = {3.0, -5.0, -1.0, 1.0, 5.0};
         TemperatureSeriesAnalysis seriesAnalysis = new TemperatureSeriesAnalysis(temperatureSeries);
         assertEquals(1, seriesAnalysis.findTempClosestToValue(0), 0.00001);
     }
@@ -103,7 +104,7 @@ public class TemperatureSeriesAnalysisTest {
     }
 
     @Test(expected = InputMismatchException.class)
-    public void testCheckTemps(){
+    public void testCheckTemps() {
         double[] temperatureSeries = {3.0, -300.0, 1.0, 5.0};
         TemperatureSeriesAnalysis seriesAnalysis = new TemperatureSeriesAnalysis();
 
@@ -111,7 +112,7 @@ public class TemperatureSeriesAnalysisTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void testCheckTemp(){
+    public void testCheckTemp() {
         TemperatureSeriesAnalysis seriesAnalysis = new TemperatureSeriesAnalysis();
         seriesAnalysis.average();
         seriesAnalysis.max();
