@@ -10,11 +10,12 @@ public class TemperatureSeriesAnalysis {
 
 
     public TemperatureSeriesAnalysis() {
-
+        this.temperatureSeries = new double[]{};
+        this.size = 0;
     }
 
-    private void checkTemperatures(){
-        if (Objects.equals(this.temperatureSeries.length, 0)){
+    private void checkTemperatures() {
+        if (Objects.equals(this.temperatureSeries.length, 0)) {
             throw new IllegalArgumentException();
         }
     }
@@ -27,7 +28,7 @@ public class TemperatureSeriesAnalysis {
     public double average() {
         this.checkTemperatures();
         double total = 0;
-        for (int i = 0; i < this.temperatureSeries.length ; i++){
+        for (int i = 0; i < this.temperatureSeries.length; i++) {
             total += this.temperatureSeries[i];
         }
         return total / this.temperatureSeries.length;
@@ -38,19 +39,19 @@ public class TemperatureSeriesAnalysis {
         double sd = 0;
         double mean = this.average();
 
-        for(double num: this.temperatureSeries) {
+        for (double num : this.temperatureSeries) {
             sd += Math.pow(num - mean, 2);
         }
 
-        return Math.sqrt(sd/this.temperatureSeries.length);
+        return Math.sqrt(sd / this.temperatureSeries.length);
     }
 
     public double min() {
         this.checkTemperatures();
 
         double minVal = 999999999;
-        for(double num: this.temperatureSeries) {
-            if (num < minVal){
+        for (double num : this.temperatureSeries) {
+            if (num < minVal) {
                 minVal = num;
             }
         }
@@ -61,8 +62,8 @@ public class TemperatureSeriesAnalysis {
         this.checkTemperatures();
 
         double maxVal = -999999999;
-        for(double num: this.temperatureSeries) {
-            if (num > maxVal){
+        for (double num : this.temperatureSeries) {
+            if (num > maxVal) {
                 maxVal = num;
             }
         }
@@ -79,13 +80,13 @@ public class TemperatureSeriesAnalysis {
         double deviation = 9999999;
         double currVal = -9999999;
 
-        for (double num: this.temperatureSeries){
+        for (double num : this.temperatureSeries) {
             double currDeviation = Math.abs(tempValue - num);
-            if (currDeviation < deviation){
+            if (currDeviation < deviation) {
                 deviation = currDeviation;
                 currVal = num;
             } else if (currDeviation == deviation) {
-                if ( num > currVal ){
+                if (num > currVal) {
                     currVal = num;
                 }
             }
@@ -96,8 +97,8 @@ public class TemperatureSeriesAnalysis {
     public double[] findTempsLessThen(double tempValue) {
         double[] result = new double[this.temperatureSeries.length];
         int currIdx = 0;
-        for (double num: this.temperatureSeries) {
-            if (num < tempValue){
+        for (double num : this.temperatureSeries) {
+            if (num < tempValue) {
                 result[currIdx] = num;
                 currIdx += 1;
             }
@@ -108,8 +109,8 @@ public class TemperatureSeriesAnalysis {
     public double[] findTempsGreaterThen(double tempValue) {
         double[] result = new double[this.temperatureSeries.length];
         int currIdx = 0;
-        for (double num: this.temperatureSeries) {
-            if (num > tempValue){
+        for (double num : this.temperatureSeries) {
+            if (num > tempValue) {
                 result[currIdx] = num;
                 currIdx += 1;
             }
@@ -125,9 +126,9 @@ public class TemperatureSeriesAnalysis {
         return new TempSummaryStatistics(avgTemp, devTemp, minTemp, maxTemp);
     }
 
-    private void checkTemps( double... temps){
-        for (double num: temps){
-            if (num < 273){
+    private void checkTemps(double... temps) {
+        for (double num : temps) {
+            if (num < -273) {
                 throw new InputMismatchException();
             }
         }
@@ -138,11 +139,12 @@ public class TemperatureSeriesAnalysis {
 
         for (double temp : temps) {
             if (temperatureSeries.length == size) {
-                temperatureSeries = Arrays.copyOf(temperatureSeries, temperatureSeries.length * 2);
+                temperatureSeries = Arrays.copyOf(temperatureSeries, (temperatureSeries.length + 1) * 2);
             }
             temperatureSeries[size] = temp;
             size += 1;
         }
-        return 0;
+
+        return size;
     }
 }

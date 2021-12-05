@@ -3,6 +3,8 @@ package ua.edu.ucu.tempseries;
 import static org.junit.Assert.*;
 import org.junit.Test;
 
+import java.util.InputMismatchException;
+
 public class TemperatureSeriesAnalysisTest {
 
     @Test
@@ -70,9 +72,9 @@ public class TemperatureSeriesAnalysisTest {
 
     @Test
     public void testFindTempClosestToValue() {
-        double[] temperatureSeries = {3.0, -5.0, 1.0, 5.0};
+        double[] temperatureSeries = {3.0, -5.0,-1.0, 1.0, 5.0};
         TemperatureSeriesAnalysis seriesAnalysis = new TemperatureSeriesAnalysis(temperatureSeries);
-        assertEquals(1, seriesAnalysis.findTempClosestToValue(1), 0.00001);
+        assertEquals(1, seriesAnalysis.findTempClosestToValue(0), 0.00001);
     }
 
     @Test
@@ -83,17 +85,39 @@ public class TemperatureSeriesAnalysisTest {
         assertEquals(analysis.findTempsLessThen(2.0)[0], new double[]{-5.0, 1.0}[0], 0.00001);
     }
 
-    public void testSummaryStatistics() {
+    @Test
+    public void testAddTemps() {
         double[] temperatureSeries = {3.0, -5.0, 1.0, 5.0};
-        TemperatureSeriesAnalysis seriesAnalysis = new TemperatureSeriesAnalysis(temperatureSeries);
-        TempSummaryStatistics statistics = seriesAnalysis.summaryStatistics();
+        TemperatureSeriesAnalysis seriesAnalysis = new TemperatureSeriesAnalysis();
 
-        assertEquals(statistics.getAvgTemp(), 1.0, 0.00001);
-        assertEquals(statistics.getDevTemp(), 56.0, 0.00001);
-        assertEquals(statistics.getMinTemp(), -5.0, 0.00001);
-        assertEquals(statistics.getMaxTemp(), 5.0, 0.00001);
+        assertEquals(seriesAnalysis.addTemps(temperatureSeries), 4, 0.00001);
+
+        TemperatureSeriesAnalysis seriesAnalysis1 = new TemperatureSeriesAnalysis(temperatureSeries);
+
+        TempSummaryStatistics summary = seriesAnalysis1.summaryStatistics();
+        assertEquals(summary.getMaxTemp(), 5, 0.00001);
+        assertEquals(summary.getAvgTemp(), 1, 0.00001);
+        assertEquals(summary.getDevTemp(), 3.74165, 0.00001);
+        assertEquals(summary.getMinTemp(), -5, 0.00001);
+
     }
 
-    public void testAddTemps() {
+    @Test(expected = InputMismatchException.class)
+    public void testCheckTemps(){
+        double[] temperatureSeries = {3.0, -300.0, 1.0, 5.0};
+        TemperatureSeriesAnalysis seriesAnalysis = new TemperatureSeriesAnalysis();
+
+        seriesAnalysis.addTemps(temperatureSeries);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testCheckTemp(){
+        TemperatureSeriesAnalysis seriesAnalysis = new TemperatureSeriesAnalysis();
+        seriesAnalysis.average();
+        seriesAnalysis.max();
+        seriesAnalysis.min();
+        seriesAnalysis.deviation();
+        seriesAnalysis.findTempClosestToValue(1);
+        seriesAnalysis.findTempClosestToZero();
     }
 }
